@@ -1,0 +1,344 @@
+#This is single line comment
+#This is multiple line comment method1
+<< comment_name
+Here you can write a lot of things that will not be executed
+comment_name
+
+<< com
+echo "hello world"
+#this is a way of printing new_line
+echo
+
+#This is string/variable declaration 
+_name="tonmoy"
+_name1='tonmoy'
+_name2=tonmoy
+_name3="my name is tonmoy"
+_name4='my name is tonmoy'
+echo $_name $_name1 $_name2 $_name3 $_name4
+
+echo "enter name , age , varsity : "
+read name age varsity
+echo $name $age $varsity
+
+read -p "name,age,varsity : " name_ age_ varsity_
+echo $name_ $age_ $varsity_
+
+#This is taking input using array named details
+#echo can be used without for strings without quotetion mark
+
+val=2
+echo give $val details about you
+read -a details
+echo "name = ${details[0]}, age = ${details[1]}"
+
+#$0 hocche script file er nam $1 and $2 jeta argument dicchi seta print korbe
+echo $0 $1 $2
+
+# $# kotogula argument disi seta print korbe
+echo $# #Here 2 print korbe karon $1 $2 duita
+
+
+IF ELIF ELSE condition 
+Structure:
+if  (( $var1 op $var2 ))/[[ $str1 op $str2 ]]
+then
+ echo do here
+elif (( $var1 op $var2 ))/[[ $str1 op $str2 ]]
+then
+ echo do here
+else
+ echo do here
+fi
+
+if/elif thakle then dite hobe
+
+---->>>>>> INTEGER comparision
+-eq,-ne,-gt,-lt,-ge,-le for {{ $var1 op $var2 }} for integer.. op =,!=,<,>,<=,>=
+
+---->>>>>> STRING comparision
+[[ $str1 op $str2 ]]
+op =,==,!=,>,<,>=,<=, -z for string zero length / string null..here equal and double equal represents same
+
+#Integer example
+
+count1=10
+count2=20
+if (( $count1 == $count2 ))
+then
+	echo they are equal
+elif (( $count1 != $count2 ))
+then
+	echo they are not equal
+fi
+
+#string example
+
+word1="tonmoy"
+word2="jibanu"
+if [[ $word1 = $word2 ]]
+then
+	echo words are equal
+else
+	echo words are not equal
+fi
+
+
+#File test operators 
+# -d $var1 if var1 contains a directory name then it will return true
+# -f $var2 regular file/file
+# -s $var3 for if a file is not empty.. then it will return true
+# -e $var3 for it file exits with that name
+
+
+#example1
+if [ -e $1  ]
+then 
+	echo $1 exits
+fi
+
+#example2
+var1=hello.sh
+if [ -s $var1 ]
+then
+	echo file is not empty
+else
+	echo file is empty
+fi
+
+#example3
+read -p "enter file name : " file
+if [ -d $file ]
+then
+	echo it is a directory
+elif [ -f $file ]
+then
+	echo it is a regular file
+fi
+
+
+#chmod +something file_name for giving some permission to that file
+#chmod -something file_name for taking some permission from that file
+#ls -al for checking all the file details
+
+read -p "enter file name : " file_name
+if [ -e $file_name ]
+then
+	if [ -w $file_name ]
+	then
+		echo "write something and Type ctrl+d for exit "
+		cat > $file_name
+		echo "Type something to append and ctrl+d to exit "
+		cat >> $file_name
+		
+	else
+		echo "no permission for writing "
+	fi
+else
+	echo "$file_name doesn't exist"
+fi
+
+
+#AND operator 
+
+read -p "Give age : " val1
+if (( $val1 >=18 && $val1 <= 30 ))
+then
+	echo "valid age"
+else
+	echo "invalid age"
+fi
+
+
+#OR operator
+
+read -p "Give age : " val1
+if (( $val1 ==18 || $val1 == 30 ))
+then
+	echo "valid age"
+else
+	echo "invalid age"
+fi
+
+
+#Arithmetic Operation
+val1=10
+val2=20
+echo $(( val1 + val2 ))
+echo $(( val1 - val2 ))
+echo $(( val1 * val2 ))
+echo $(( val2 / val1 ))
+echo $(( val2 % val1 ))
+
+val1=10;
+val2=20;
+echo $(( val1 + val2 )) | bc
+echo $(( val1 - val2 )) | bc
+echo $(( val1 * val2 )) | bc
+echo "scale=2; $val1 / $val2 " | bc #we can use this quotation #method for others also.. scale ekhane decimal point er por koyta #numeric thakbe seta bujhai
+echo $(( val1 % val2 )) | bc
+
+val1=27
+echo "scale=2; sqrt($val1) " | bc -l
+echo "scale=2; 3^3 " | bc
+
+
+#CASE statement structure
+case expression in
+	pattern1/regex )
+	statements ;;
+	pattern2/regex )
+	statements ;;
+	pattern3/regex )
+	statements ;;
+	* ) # match pattern bade baki gula works like default
+esac
+
+#example 1 : particular garir type dibe and price print 
+vehicle_type=$1
+case $vehicle_type in
+	"car" )
+	echo "price is 100 dollar " ;;
+	"van" )
+	echo "price is 80 dollar" ;;
+	"truck" )
+	echo "price is 150 dollar" ;;
+	* )
+	echo "something else " ;;
+esac
+
+#example 2 : user any charecter dibe bolte hobe eta ki type er
+#[[:alpha:]],[[:digit:]],[[:lower:]],[[:upper:]],[[:punct:]]
+read -p "Enter value : " val1
+case $val1 in
+	[[:lower:]] )
+	echo "lowercase letter " ;;
+	[A-Z]* )
+	echo "uppercase letter" ;;
+	[0-9] )
+	echo "0 to 9 digit" ;;
+	? )
+	echo "special charecter" ;;
+	* )
+	echo "something else " ;;
+esac
+
+#example 3 : checking range
+read -p "Enter value : " val1
+case $(( val1 >= 0 && val1 <= 100 ? 1 :
+	 val1 >= 101 && val1 <= 200 ? 2 :
+	 val1 >= 201 && val1 <= 300 ? 3 :
+	 0)) in
+	"1" )
+	echo "range between 0-100 " ;;
+	"2" )
+	echo "range between 101-200 " ;;
+	"3" )
+	echo "range between 201-300 " ;;
+	"0" )
+	echo "unknown range" ;;
+esac
+
+#Example 4
+for file in *
+do
+ case $file in
+ 	*.sh )
+ 	echo "a shell file" ;;
+ 	* )
+ 	echo "ignoring unknown file" ;;
+ esac
+done
+
+#Lets discuss arrays
+read -a arr
+echo "${arr[@]}"
+
+OS=('ubuntu' 'windows' 'mac')
+OS[3]='kali' #inserting new data
+
+echo "${OS[@]}"
+echo "${#OS[@]}" # size of the array
+echo "${OS[0]}"
+echo "${OS[3]}"
+
+OS[0]="buntu buntu" #overriding new data
+echo "${OS[0]}"
+
+
+#Using while loop
+while [ condition is true ]
+do
+ commands
+ increment/decrement condition
+done
+
+val1=1
+while (( $val1 <=10 ))
+do
+ echo $val1
+ val1=$(( val1 + 1 )) # (( val1++))
+done
+
+
+#until loop structure
+until [ condition is false ]
+do
+ increment decrement condition
+done
+
+#example 1 : printing 1-10
+val1=1
+until (( $val1 > 10 ))
+do
+ echo $val1
+ (( val1++ ))
+done
+
+#for loop structure
+for i in 1 2 3 4 5
+do
+done
+
+for i in {1..20}  # default increment 1
+do
+done
+
+for i in {1..20..2} # increment by 2
+do
+done
+
+for item in *
+do
+ if [ -d $item ]
+ then 
+ 	echo "$item is a directory"
+ fi 
+done
+
+for i in {1..10}
+do
+ echo $i
+ if (( $i == 5 ))
+ then
+ 	break
+ fi
+done
+
+
+for i in {1..10}
+do
+ if (( $i == 5 ))
+ then
+ 	continue
+ fi
+ echo $i
+done
+com
+
+#Functions
+function print()
+{
+ echo $1
+}
+print Hello
